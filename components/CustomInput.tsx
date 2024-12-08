@@ -24,13 +24,13 @@ const CustomInput = ({ control, name, label, placeholder }: CustomInput) => {
       control={control}
       name={name}
       render={({ field }) => (
-        <div className="form-item">
+        <div className="form-item" suppressHydrationWarning>
           <FormLabel className="form-label">{label}</FormLabel>
           <div className="flex w-full flex-col">
             <FormControl>
               <Input
                 placeholder={placeholder}
-                className="input-class "
+                className="input-class"
                 type={name === "password" ? "password" : "text"}
                 {...field}
               />

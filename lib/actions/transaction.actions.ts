@@ -51,10 +51,11 @@ export const getTransactionsByBankId = async ({
     );
 
     const transactions = {
-      total: senderTransactions.total + receiverTransactions.total,
+      total:
+        (senderTransactions.total || 0) + (receiverTransactions.total || 0),
       documents: [
-        ...senderTransactions.documents,
-        ...receiverTransactions.documents,
+        ...(senderTransactions.documents || []),
+        ...(receiverTransactions.documents || []),
       ],
     };
 

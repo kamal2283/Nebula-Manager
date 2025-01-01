@@ -1,5 +1,3 @@
-import React from "react";
-
 import {
   Table,
   TableBody,
@@ -9,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { transactionCategoryStyles } from "@/constants";
 import {
   cn,
   formatAmount,
@@ -16,13 +15,13 @@ import {
   getTransactionStatus,
   removeSpecialCharacters,
 } from "@/lib/utils";
-import { transactionCategoryStyles } from "@/constants";
 
 const CategoryBadge = ({ category }: CategoryBadgeProps) => {
   const { borderColor, backgroundColor, textColor, chipBackgroundColor } =
     transactionCategoryStyles[
       category as keyof typeof transactionCategoryStyles
     ] || transactionCategoryStyles.default;
+
   return (
     <div className={cn("category-badge", borderColor, chipBackgroundColor)}>
       <div className={cn("size-2 rounded-full", backgroundColor)} />
@@ -31,17 +30,16 @@ const CategoryBadge = ({ category }: CategoryBadgeProps) => {
   );
 };
 
-const TransactionsTable = ({ transactions }: TransactionTableProps) => {
+const TransactionsTable = ({ transactions = [] }: TransactionTableProps) => {
   return (
     <Table>
       <TableHeader className="bg-[#f9fafb]">
         <TableRow>
-          <TableHead className="px-2">Transactions</TableHead>
+          <TableHead className="px-2">Transaction</TableHead>
           <TableHead className="px-2">Amount</TableHead>
-          <TableHead className="px-2">Transactions</TableHead>
           <TableHead className="px-2">Status</TableHead>
           <TableHead className="px-2">Date</TableHead>
-          <TableHead className="px-2 max-md:hidden ">Channel</TableHead>
+          <TableHead className="px-2 max-md:hidden">Channel</TableHead>
           <TableHead className="px-2 max-md:hidden">Category</TableHead>
         </TableRow>
       </TableHeader>
@@ -49,6 +47,7 @@ const TransactionsTable = ({ transactions }: TransactionTableProps) => {
         {transactions.map((t: Transaction) => {
           const status = getTransactionStatus(new Date(t.date));
           const amount = formatAmount(t.amount);
+
           const isDebit = t.type === "debit";
           const isCredit = t.type === "credit";
 
@@ -71,7 +70,7 @@ const TransactionsTable = ({ transactions }: TransactionTableProps) => {
                 className={`pl-2 pr-10 font-semibold ${
                   isDebit || amount[0] === "-"
                     ? "text-[#f04438]"
-                    : "text-[#039855"
+                    : "text-[#039855]"
                 }`}
               >
                 {isDebit ? `-${amount}` : isCredit ? amount : amount}
@@ -80,12 +79,15 @@ const TransactionsTable = ({ transactions }: TransactionTableProps) => {
               <TableCell className="pl-2 pr-10">
                 <CategoryBadge category={status} />
               </TableCell>
-              <TableCell className=" min-w-32 pl-2 pr-10">
+
+              <TableCell className="min-w-32 pl-2 pr-10">
                 {formatDateTime(new Date(t.date)).dateTime}
               </TableCell>
+
               <TableCell className="pl-2 pr-10 capitalize min-w-24">
                 {t.paymentChannel}
               </TableCell>
+
               <TableCell className="pl-2 pr-10 max-md:hidden">
                 <CategoryBadge category={t.category} />
               </TableCell>
@@ -98,5 +100,3 @@ const TransactionsTable = ({ transactions }: TransactionTableProps) => {
 };
 
 export default TransactionsTable;
-
-// 5:11:54
